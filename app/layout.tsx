@@ -26,40 +26,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}>
         {/* Sidebar */}
-        <nav className="bg-gray-800 text-white w-16 hover:w-48 transition-all duration-300 h-screen flex flex-col items-start py-4 group">
+        <nav className="bg-gray-800 text-white w-16 hover:w-48 transition-all duration-300 flex flex-col items-start py-4 group min-h-screen">
           {/* Home */}
-          <Link
-            href="/"
-            className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded"
-          >
+          <Link href="/" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
             <Home className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Home
             </span>
           </Link>
 
-
           {/* Inventory */}
-          <Link
-            href="/inventory"
-            className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded"
-          >
+          <Link href="/inventory" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
             <Package className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Inventory
             </span>
           </Link>
 
-
           {/* Invoicing */}
-          <Link
-            href="/invoicing"
-            className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded"
-          >
+          <Link href="/invoicing" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
             <FileText className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Invoicing
@@ -67,10 +54,7 @@ export default function RootLayout({
           </Link>
 
           {/* Scheduling */}
-          <Link
-            href="/scheduling"
-            className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded"
-          >
+          <Link href="/scheduling" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
             <Calendar className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Scheduling
@@ -78,10 +62,7 @@ export default function RootLayout({
           </Link>
 
           {/* Settings */}
-          <Link
-            href="/settings"
-            className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded"
-          >
+          <Link href="/settings" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
             <Settings className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Settings
