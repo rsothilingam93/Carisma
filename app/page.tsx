@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from "recharts";
 
-/* ---------- test ---------- */
 /* ---------- Static invoice chart (unchanged) ---------- */
 const invoiceVolume = [
   { month: "Jan", invoices: 420 },
