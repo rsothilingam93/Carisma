@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Home, Package, Settings, FileText, Calendar } from "lucide-react";
+import { Home, Package, Settings, FileText, Calendar, Drill } from "lucide-react";
 import Link from "next/link";
 
 const geistSans = Geist({
@@ -58,6 +58,14 @@ export default function RootLayout({
             <Calendar className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Scheduling
+            </span>
+          </Link>
+
+          {/* Parts */}
+          <Link href="/parts" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
+            <Drill className="w-6 h-6 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              Parts
             </span>
           </Link>
 
