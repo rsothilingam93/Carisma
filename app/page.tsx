@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import {
   PieChart,
   Pie,
@@ -26,7 +28,49 @@ const invoiceVolume = [
 
 const COLORS = ["#10b981", "#38bdf8", "#f59e0b"];
 
+interface Schedule {
+  id: string;
+  job_name: string;
+  employee: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  note?: string;
+}
+
+function getWeekDates() {
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d.toISOString().split("T")[0];
+  });
+}
+
 export default function Home() {
+  const [weekSchedules, setWeekSchedules] = useState<Schedule[]>([]);
+  const weekDates = getWeekDates();
+
+  useEffect(() => {
+    fetchWeekSchedules();
+  }, []);
+
+  async function fetchWeekSchedules() {
+    const { data, error } = await supabase
+      .from<Schedule>("schedules")
+      .select("*")
+      .gte("date", weekDates[0])
+      .lte("date", weekDates[6])
+      .order("date", { ascending: true })
+      .order("start_time", { ascending: true });
+
+    if (error) console.error("Calendar fetch error:", error.message);
+    else setWeekSchedules(data || []);
+  }
+
   return (
     <div className="max-w-6xl">
       {/* Hero */}
@@ -50,12 +94,8 @@ export default function Home() {
 
       {/* Dashboard Charts */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        {/* Pie Chart */}
         <div className="rounded-xl border border-white/10 bg-zinc-900 p-6">
-          <h3 className="text-white font-semibold mb-4">
-            Vehicle Status
-          </h3>
-
+          <h3 className="text-white font-semibold mb-4">Vehicle Status</h3>
           <ResponsiveContainer width="100%" height={260}>
             <PieChart>
               <Pie
@@ -73,12 +113,8 @@ export default function Home() {
           </ResponsiveContainer>
         </div>
 
-        {/* Bar Chart */}
         <div className="rounded-xl border border-white/10 bg-zinc-900 p-6">
-          <h3 className="text-white font-semibold mb-4">
-            Monthly Invoices
-          </h3>
-
+          <h3 className="text-white font-semibold mb-4">Monthly Invoices</h3>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={invoiceVolume}>
               <XAxis
@@ -88,13 +124,60 @@ export default function Home() {
                 axisLine={false}
               />
               <Tooltip />
-              <Bar
-                dataKey="invoices"
-                fill="#10b981"
-                radius={[6, 6, 0, 0]}
-              />
+              <Bar dataKey="invoices" fill="#10b981" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </section>
+
+      {/* Weekly Jobs Calendar */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold text-white mb-6">
+          This Week’s Jobs
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-4">
+          {weekDates.map((date) => (
+            <div
+              key={date}
+              className="rounded-xl border border-white/10 bg-zinc-900 p-3"
+            >
+              <div className="text-sm font-semibold text-emerald-400 mb-3">
+                {new Date(date).toLocaleDateString(undefined, {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </div>
+
+              <div className="space-y-2">
+                {weekSchedules
+                  .filter((s) => s.date === date)
+                  .map((s) => (
+                    <div
+                      key={s.id}
+                      className="rounded-lg bg-zinc-800 border border-white/10 p-2"
+                    >
+                      <div className="text-sm font-semibold text-white">
+                        {s.job_name}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {s.employee}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {s.start_time}–{s.end_time}
+                      </div>
+                    </div>
+                  ))}
+
+                {weekSchedules.filter((s) => s.date === date).length === 0 && (
+                  <div className="text-xs text-gray-600 italic">
+                    No jobs
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -128,21 +211,11 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Feature({
-  title,
-  desc,
-}: {
-  title: string;
-  desc: string;
-}) {
+function Feature({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="rounded-xl border border-white/10 bg-zinc-900 p-6 transition hover:bg-zinc-800">
-      <h3 className="text-lg font-semibold text-white mb-2">
-        {title}
-      </h3>
-      <p className="text-gray-400 text-sm leading-relaxed">
-        {desc}
-      </p>
+      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+      <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
     </div>
   );
 }
