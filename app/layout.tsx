@@ -70,7 +70,7 @@ export default function RootLayout({
           </Link>
 
             {/* Chatbot */}
-            <Link href="/parts" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
+            <Link href="/chatbot" className="flex items-center w-full px-3 py-3 hover:bg-gray-700 rounded">
             <Bot className="w-6 h-6 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Chatbot
